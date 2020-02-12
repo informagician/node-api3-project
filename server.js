@@ -13,6 +13,9 @@ server.get('/:id', validateUserId, (req, res) => {
   
 });
 
+server.post('/', validateUser, (req,res) => {
+
+})
 // server.get('/:id', (req, res) => {
 //   const {id} = req.params;
 //   userDb.getById(id).then(users => {
@@ -32,7 +35,6 @@ function logger (req,res,next) {
   next();
 }
 
-
 function validateUserId(req,res,next) {
   const {id} = req.params;
   userDb.getById(id).then(users => {
@@ -45,4 +47,14 @@ function validateUserId(req,res,next) {
   next();
 }
 
+function validateUser(req,res,next){
+  const body = req.body;
+  console.log(body)
+  if(Object.keys(body).length === 0){
+    res.status(400).json({ message: "missing user data" })
+  } else if (!body.name) {
+    res.status(400).json({ message: "missing required name field" })
+  }
+  next();
+}
 module.exports = server;
