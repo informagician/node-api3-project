@@ -17,6 +17,7 @@ router.post('/', validateUser, (req, res) => {
 
 router.post('/:id/posts', (req, res) => {
   // do your magic!
+
 });
 
 router.get('/', (req, res) => {
@@ -54,8 +55,15 @@ router.delete('/:id', validateUserId, (req, res) => {
   })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id',validateUser,validateUserId, (req, res) => {
   // do your magic!
+  userDb.update(req.user.id, req.body)
+  .then(users => {
+    res.status(200).json(users)
+  })
+  .catch(err => {
+    res.status(500).json({errorMessage:"something went wrong"})
+  })
 });
 
 //custom middleware
@@ -77,7 +85,7 @@ function validateUserId(req, res, next) {
 function validateUser(req, res, next) {
   // do your magic!
   const body = req.body;
-  console.log(body)
+  //console.log(body)
   if(Object.keys(body).length === 0){
     res.status(400).json({ message: "missing user data" })
   } else if (!body.name) {
