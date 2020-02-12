@@ -4,9 +4,15 @@ const router = express.Router();
 
 const userDb = require('./userDb')
 
-router.post('/', (req, res) => {
+router.post('/', validateUser, (req, res) => {
   // do your magic!
-  userDb.insert()
+  userDb.insert(req.body)
+  .then(users => {
+    res.status(201).json(users)
+  })
+  .catch(err => {
+    res.status(500).json({errorMessage: "Some Problem happened"})
+  })
 });
 
 router.post('/:id/posts', (req, res) => {
