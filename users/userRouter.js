@@ -22,12 +22,19 @@ router.get('/', (req, res) => {
 
 router.get('/:id', validateUserId, (req, res) => {
   // do your magic!
-  console.log(req.user)
+  //console.log(req.user)
   res.status(200).json(req.user)
 });
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts', validateUserId, (req, res) => {
   // do your magic!
+  //console.log(req.user.id)
+  userDb.getUserPosts(req.user.id).then(p => {
+    res.status(200).json(p)
+  })
+  .catch(err => {
+    res.status(500).end() 
+  })
 });
 
 router.delete('/:id', (req, res) => {
