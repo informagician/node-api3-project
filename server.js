@@ -57,4 +57,15 @@ function validateUser(req,res,next){
   }
   next();
 }
+
+function validatePost(req,res,next){
+  const body = req.body;
+  console.log(body)
+  if(Object.keys(body).length === 0){
+    res.status(400).json({ message: "missing post data" })
+  } else if (!body.text) {
+    res.status(400).json({ message: "missing required text field" })
+  }
+  next();
+}
 module.exports = server;
