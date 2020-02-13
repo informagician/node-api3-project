@@ -33,6 +33,14 @@ router.delete('/:id', validatePostId, (req, res) => {
 
 router.put('/:id', validatePostId, (req, res) => {
   // do your magic!
+
+  postDb.update(req.posts.id, req.body)
+  .then(posts => {
+    res.status(201).json(posts)
+  })
+  .catch(err => {
+    res.status(500).json({errorMessage:"cant update post"})
+  })
 });
 
 // custom middleware
@@ -44,7 +52,6 @@ function validatePostId(req, res, next) {
   .then(posts => {
     if(Object.keys(posts).length > 0){
       req.posts = posts
-      console.log(req.postid)
       next();
     }
   })
