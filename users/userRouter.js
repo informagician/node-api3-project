@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const userDb = require('./userDb')
+const postDb = require('../posts/postDb')
 
 router.post('/', validateUser, (req, res) => {
   // do your magic!
@@ -15,8 +16,19 @@ router.post('/', validateUser, (req, res) => {
   })
 });
 
-router.post('/:id/posts', (req, res) => {
+router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
   // do your magic!
+  const post = {
+    user_id:req.user.id,
+    text: req.body.text
+  }
+  postDb.insert(post)
+  .then(posts => {
+    res.status(201).json(posts)
+  })
+  .catch(err => {
+    res.status(500).json({errorMessage:"some issue"})
+  })
 });
 
 router.get('/', (req, res) => {
